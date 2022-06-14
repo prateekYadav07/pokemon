@@ -1,47 +1,59 @@
 <template>
-  <div class="card">
-    <div class="title">Title</div>
+  <pokemon-vue :pokemons="pokemons" 
+  :selectedId="selectedId" 
+  @chosen="fetchEvol"/>
 
-    <div class="content">content</div>
-
-    <div class="description">Description</div>
-  </div>
+  <pokemon-vue :pokemons="evolutions" />
 </template>
 
 <script>
+import PokemonVue from './components/Pokemon.vue';
+
+const api = "https://pokeapi.co/api/v2/pokemon";
+const IDS = [1,4,7];
 export default {
   name: "App",
-  components: {},
+  components: {
+    PokemonVue,
+  },
+  data() {
+    return {
+      pokemons: [],
+      evolutions: [],
+      selectedId: null,
+    };
+  },
+
+  async created() {
+    this.pokemons = await this.fetchData(IDS);
+  },
+
+  methods: {
+
+    async fetchEvol(pokemon){
+      this.evolutions = await this.fetchData(
+        [pokemon.id + 1, pokemon.id + 2])
+      this.selectedId = pokemon.id
+    },
+
+    async fetchData(ids) {
+      const responses = await Promise.all(
+        ids.map((id) => window.fetch(`${api}/${id}`))
+      );
+      const json = await Promise.all(
+        responses.map((response) => response.json())
+      );
+      return json.map((data) => ({
+        id: data.id,
+        name: data.name,
+        sprite: data.sprites.other["official-artwork"].front_default,
+        types: data.types.map((type) => type.type["name"]),
+      }));
+    },
+  },
 };
 </script>
 
 <style>
-.card {
-  border: 1px solid silver;
-  border-radius: 8px;
-  max-width: 200px;
-  margin: 0 5px;
-  cursor: pointer;
-  box-shadow: 0px 1px 3px darkgrey;
-  transition: 0.2s;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-.title,
-.content,
-.description {
-  padding: 16px;
-  text-transform: capitalize;
-  text-align: center;
-}
-.title,
-.content {
-  border-bottom: 1px solid silver;
-}
-.title {
-  font-size: 1.25em;
-}
-.card:hover {
-  transition: 0.2s;
-  box-shadow: 0px 1px 9px darkgrey;
-}
+
 </style>
