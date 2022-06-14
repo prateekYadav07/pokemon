@@ -63,7 +63,7 @@ export default {
 
 .cards {
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 
 img {

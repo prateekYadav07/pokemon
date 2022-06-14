@@ -1,16 +1,20 @@
 <template>
-  <pokemon-vue :pokemons="pokemons" 
-  :selectedId="selectedId" 
-  @chosen="fetchEvol"/>
+
+  <pokemon-vue
+    :pokemons="pokemons"
+    :selectedId="selectedId"
+    @chosen="fetchEvol"
+  />
 
   <pokemon-vue :pokemons="evolutions" />
 </template>
 
 <script>
-import PokemonVue from './components/Pokemon.vue';
+import PokemonVue from "./components/Pokemon.vue";
 
 const api = "https://pokeapi.co/api/v2/pokemon";
-const IDS = [1,4,7];
+let IDS = [];
+
 export default {
   name: "App",
   components: {
@@ -25,15 +29,22 @@ export default {
   },
 
   async created() {
+    IDS = this.fillIds();
     this.pokemons = await this.fetchData(IDS);
   },
 
   methods: {
+    fillIds() {
+      const ids = [];
+      for (let i = 1; i < 151; i++) {
+        ids.push(i);
+      }
+      return ids;
+    },
 
-    async fetchEvol(pokemon){
-      this.evolutions = await this.fetchData(
-        [pokemon.id + 1, pokemon.id + 2])
-      this.selectedId = pokemon.id
+    async fetchEvol(pokemon) {
+      this.evolutions = await this.fetchData([pokemon.id + 1, pokemon.id + 2]);
+      this.selectedId = pokemon.id;
     },
 
     async fetchData(ids) {
@@ -55,5 +66,4 @@ export default {
 </script>
 
 <style>
-
 </style>
