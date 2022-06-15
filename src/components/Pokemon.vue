@@ -8,7 +8,7 @@
       @click="click(pokemon)"
     >
       <template v-slot:title>
-        {{ pokemon.name }}
+        {{pokemon.id}} {{ pokemon.name }} 
       </template>
 
       <template v-slot:content>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import CardVue from './Card.vue';
+import CardVue from "./Card.vue";
 
 export default {
   name: "PokemonVue",
@@ -44,11 +44,11 @@ export default {
     },
   },
 
-  methods:{
-    click(pokemon){
-        this.$emit('chosen', pokemon)
-    }
-  },    
+  methods: {
+    click(pokemon) {
+      this.$emit("chosen", pokemon);
+    },
+  },
 };
 </script>
 

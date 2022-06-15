@@ -1,19 +1,45 @@
 <template>
-
-  <pokemon-vue
-    :pokemons="pokemons"
-    :selectedId="selectedId"
-    @chosen="fetchEvol"
-  />
-
-  <pokemon-vue :pokemons="evolutions" />
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <pokemon-vue
+          :pokemons="pokemons"
+          :selectedId="selectedId"
+          @chosen="fetchEvol"
+        />
+      </div>
+      <div class="col">
+        <pokemon-vue :pokemons="evolutions" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <pokemon-vue
+          :pokemons="pokemons1"
+          :selectedId="selectedId"
+          @chosen="fetchEvol"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <pokemon-vue
+          :pokemons="pokemons2"
+          :selectedId="selectedId"
+          @chosen="fetchEvol"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import PokemonVue from "./components/Pokemon.vue";
 
 const api = "https://pokeapi.co/api/v2/pokemon";
-let IDS = [];
+let IDS = [1, 4, 7];
+let IDS1 = [10, 13, 16];
+let IDS2 = [19, 29, 32];
 
 export default {
   name: "App",
@@ -23,20 +49,23 @@ export default {
   data() {
     return {
       pokemons: [],
+      pokemons1: [],
+      pokemons2: [],
       evolutions: [],
       selectedId: null,
     };
   },
 
   async created() {
-    IDS = this.fillIds();
     this.pokemons = await this.fetchData(IDS);
+    this.pokemons1 = await this.fetchData(IDS1);
+    this.pokemons2 = await this.fetchData(IDS2);
   },
 
   methods: {
     fillIds() {
       const ids = [];
-      for (let i = 1; i < 151; i++) {
+      for (let i = 1; i < 18; i += 3) {
         ids.push(i);
       }
       return ids;
